@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MiuGo Pets – Đồ cho mèo, gọn cho phòng trọ</title>
+  <meta name="description" content="Nhà, bàn cào, đồ chơi bằng carton gấp gọn cho mèo. Gọn cho phòng nhỏ, đủ cho mèo.">
+  <meta property="og:title" content="MiuGo Pets – Gọn cho phòng nhỏ, đủ cho mèo">
+  <link rel="icon" href="images/brand/favicon.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+<!-- Thư viện hiển thị mô hình 3D và AR -->
+<script type="module"
+src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
+
+<script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="w nav">
+      <a class="lg" href="#top">
+        <img src="images/brand/logo.jpg" alt="Logo MiuGo Pets">
+        <b>MiuGo Pets</b>
+      </a>
+      <!-- MENU CHÍNH: Liên kết đến các khu vực và trang tương ứng.
+     Muốn đổi tên mục menu thì sửa trực tiếp phần chữ giữa hai thẻ a. -->
+       <nav aria-label="Điều hướng chính">
+      <a href="#sp" aria-current="page">Trang Chủ</a>
+      <a href="thuong-hieu.html">Về MiuGo Pets</a>
+      <a href="tin-tuc.html">Tin tức</a>
+      <a href="#vet">Dịch vụ</a>
+      <a href="#faq">Hỏi đáp</a>
+      <a href="#lh">Liên hệ</a>
+      </nav>
+      <button class="btn" id="cb" type="button" aria-label="Mở giỏ hàng">Giỏ hàng<span id="cnt">0</span></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="w hero">
+      <div>
+        <h1>Gọn cho phòng nhỏ, đủ cho mèo</h1>
+        <p>Nhà, chỗ chơi và bàn cào lắp ghép tự do. Tối ưu diện tích, tháo gấp gọn, dễ di chuyển.</p>
+        <div class="bt"><a class="btn" href="#sp">Xem sản phẩm</a><a class="btn o" href="#vet">Dịch vụ</a></div>
+      </div>
+      <div class="cl">
+  <img
+    id="hero-slide-image"
+    class="hero-slide-image"
+    src="images/hero/hero.jpg"
+    alt="Nhà module carton nhiều tầng cho mèo"
+  >
+</div>
+    </div>
+    <div class="tick"><span>Ghép thành nhiều kiểu, không cần dụng cụ</span><span>Gấp gọn khi chuyển chỗ</span><span>Giao toàn quốc, thanh toán dễ dàng</span></div>
+
+    <section id="sp"><div class="w">
+      <h2>Sản phẩm cho mèo của bạn</h2>
+      <p class="sub">Bộ sản phẩm gấp gọn modun có nhiều chất liệu để lựa chọn và dụng cụ đi kèm cho bé mèo của bạn.</p>
+      <div class="bar">
+        <input id="q" type="search" placeholder="Tìm sản phẩm, ví dụ: bàn cào" aria-label="Tìm sản phẩm">
+        <select id="so" aria-label="Sắp xếp">
+          <option value="">Sắp xếp mặc định</option><option value="up">Giá thấp đến cao</option><option value="dn">Giá cao đến thấp</option>
+        </select>
+      </div>
+      <div class="bar" id="ch" aria-label="Danh mục sản phẩm"></div>
+      <div class="grid" id="grid" aria-live="polite"></div>
+    </div></section>
+
+    <section id="vet"><div class="w vg">
+      <div>
+        <h2>Dịch vụ thú y cùng MiuGo Pets</h2>
+        <p>Để lại thông tin, MiuGo Pets sẽ kết nối bạn với phòng khám thú y đối tác gần khu vực của bạn. Bạn trả phí khám trực tiếp tại phòng khám.</p>
+        <ul class="vl">
+          <li class="cl"><b>Khám tổng quát và tiêm phòng</b><small>Cho mèo mới về nhà hoặc khám định kỳ</small></li>
+          <li class="cl"><b>Triệt sản, tẩy giun, vệ sinh răng</b><small>Tư vấn trước khi đặt lịch</small></li>
+          <li class="cl"><b>Khám khi mèo có dấu hiệu lạ</b><small>Biếng ăn, nôn, đi vệ sinh bất thường</small></li>
+        </ul>
+        <small>Đặt lịch khám dễ dàng, tiện lợi và nhanh chóng.</small>
+      </div>
+      <form class="cl" id="vf">
+        <h3>Đăng ký lịch khám</h3>
+        <input name="name" placeholder="Họ tên" required autocomplete="name">
+        <input name="phone" type="tel" placeholder="Số điện thoại" required autocomplete="tel" pattern="[0-9 +]{9,13}">
+        <input name="area" placeholder="Quận/huyện bạn đang ở" required>
+        <select name="svc"><option>Khám tổng quát</option><option>Tiêm phòng</option><option>Triệt sản</option><option>Tẩy giun, vệ sinh răng</option><option>Khác (ghi chú bên dưới)</option></select>
+        <textarea name="note" rows="2" placeholder="Mèo mấy tháng tuổi, có triệu chứng gì?"></textarea>
+        <button class="btn" type="submit">Gửi đăng ký</button>
+      </form>
+    </div></section>
+
+    <section id="faq" style="background:var(--s)"><div class="w">
+      <h2>Hỏi đáp</h2>
+      <details><summary>Mèo có làm hỏng nhà module nhanh không?</summary><p>MiuGo Pets cung cấp nhiều lựa chọn chất liệu cho module, khách hàng có thể tùy thích lựa chọn. Khi một module mòn, bạn thay riêng module đó mà không cần mua lại cả bộ.</p></details>
+      <details><summary>Nhà module có chịu được mèo trưởng thành không?</summary><p>Bạn hoàn toàn yên tâm về chất lượng sản phẩm. Sản phẩm của hãng được tối ưu trọng lượng cho cả mèo con và mèo trưởng thành. Nhắn MiuGo cân nặng mèo, chúng tôi gợi ý cách ghép an toàn.</p></details>
+      <details><summary>Phí giao hàng và đổi trả thế nào?</summary><p>Đơn từ 299.000₫ được miễn phí giao hàng. Hàng lỗi hoặc sai mẫu được đổi trong 7 ngày kể từ khi nhận.</p></details>
+      <details><summary>Tôi thanh toán bằng cách nào?</summary><p>Bạn chọn thanh toán khi nhận hàng hoặc chuyển khoản khi đặt đơn.</p></details>
+    </div></section>
+  </main>
+
+  <!-- FOOTER: Thông tin thương hiệu và liên hệ.
+     Nội dung liên hệ được JavaScript lấy từ CFG trong script.js. -->
+ <footer id="lh">
+  <div class="w">
+
+    <div>
+      <b>MiuGo Pets</b><br>
+      <span id="footer-slogan">Gọn cho phòng nhỏ, đủ cho mèo</span><br>
+      <span id="footer-intro">Cửa hàng đồ cho mèo đa dạng, tiện lợi, tối ưu</span>
+    </div>
+
+    <div>
+      <b>Liên hệ</b><br>
+      <a id="zf" href="#">Zalo</a><br>
+      <a id="ef" href="#">miugopets@gmail.com</a><br>
+      <span id="footer-hours"></span>
+    </div>
+
+    <div>
+      <b>Theo dõi</b><br>
+      <a id="footer-tiktok" href="#" target="_blank" rel="noopener">TikTok</a><br>
+      <a id="footer-facebook" href="#" target="_blank" rel="noopener">Facebook</a>
+    </div>
+
+    <div class="cp">
+      © 2026 MiuGo Pets. Mọi quyền được bảo lưu.
+    </div>
+
+  </div>
+</footer>
+<!-- ===== NÚT CUỘN LÊN ĐẦU TRANG ===== -->
+
+<button
+    id="scroll-progress-top"
+    class="scroll-progress-top"
+    type="button"
+    aria-label="Cuộn lên đầu trang"
+    title="Cuộn lên đầu trang">
+
+    <span aria-hidden="true">↑</span>
+
+</button>
+  <a class="zl" id="zl" href="#" aria-label="Mở chat MiuGo Pets">
+    <img src="images/about/chat-1.png" alt="">
+</a>
+
+<!-- ===== BONG BÓNG HỖ TRỢ MÀU SẮC ===== -->
+
+<button
+    id="color-accessibility-toggle"
+    class="color-accessibility-fab"
+    type="button"
+    aria-label="Mở chức năng hỗ trợ màu sắc"
+    aria-expanded="false"
+    aria-controls="color-accessibility-panel">
+
+    <img
+        src="images/about/chat-2.png"
+        alt="">
+</button>
+
+<!-- ===== POPUP HỖ TRỢ MÀU SẮC ===== -->
+
+<div
+    id="color-accessibility-panel"
+    class="color-accessibility-panel"
+    role="dialog"
+    aria-labelledby="color-accessibility-title"
+    hidden>
+
+    <div class="color-accessibility-header">
+
+        <b id="color-accessibility-title">
+            Hỗ trợ người bị mù màu
+        </b>
+
+        <button
+            id="color-accessibility-close"
+            type="button"
+            aria-label="Đóng">
+            ×
+        </button>
+
+    </div>
+
+    <p>
+        Điều chỉnh màu giao diện để nội dung và các nút
+        dễ phân biệt hơn.
+    </p>
+
+    <button
+        id="color-accessibility-apply"
+        class="color-accessibility-apply"
+        type="button">
+        Bật giao diện dễ phân biệt
+    </button>
+
+    <button
+        id="color-accessibility-reset"
+        class="color-accessibility-reset"
+        type="button">
+        Trở về giao diện gốc
+    </button>
+
+    <small id="color-accessibility-status">
+        Đang sử dụng giao diện gốc.
+    </small>
+
+</div>
+</escape>
+
+<!-- ===== MIUGO PETS CHAT WIDGET ===== -->
+
+<section id="miugo-chat-panel"
+         class="miugo-chat-panel"
+         hidden
+         aria-label="Tư vấn MiuGo Pets">
+
+  <!-- HEADER CHAT -->
+  <div class="mg-chat-header">
+
+  <div class="mg-chat-brand">
+    <div class="mg-chat-avatar">🐾</div>
+
+    <div>
+      <b>MiuGo Pets</b>
+      <small>Trợ lý tư vấn trực tuyến</small>
+    </div>
+  </div>
+
+  <div class="mg-chat-header-actions">
+
+    <!-- Làm mới cuộc trò chuyện -->
+    <button id="miugo-chat-reset"
+            type="button"
+            aria-label="Làm mới cuộc trò chuyện"
+            title="Làm mới">
+      ↻
+    </button>
+
+    <!-- Đóng cửa sổ chat -->
+    <button id="miugo-chat-close"
+            type="button"
+            aria-label="Đóng cửa sổ chat"
+            title="Đóng">
+      ×
+    </button>
+
+  </div>
+
+</div>
+
+  <!-- NỘI DUNG CHAT -->
+  <div id="miugo-chat-messages"
+       class="mg-chat-messages"
+       aria-live="polite">
+
+    <div class="mg-chat-message bot">
+      <div class="mg-chat-bubble">
+        Xin chào! Chào mừng bạn đến với MiuGo Pets 🐱
+
+        Mình có thể giúp bạn tìm hiểu sản phẩm,
+        lựa chọn module, chất liệu và giải đáp
+        các thắc mắc về cửa hàng.
+      </div>
+    </div>
+
+    <!-- CÂU HỎI GỢI Ý -->
+    <div class="mg-chat-quick-start">
+
+      <p>Bạn đang quan tâm đến điều gì?</p>
+
+      <button type="button"
+              data-chat-prompt="Tôi muốn tìm nhà module lắp ghép">
+        🏠 Nhà module lắp ghép
+      </button>
+
+      <button type="button"
+              data-chat-prompt="Tôi muốn xem các module riêng lẻ">
+        🧩 Module riêng lẻ
+      </button>
+
+      <button type="button"
+              data-chat-prompt="Tôi muốn tìm bàn cào cho mèo">
+        🐾 Bàn cào cho mèo
+      </button>
+
+      <button type="button"
+              data-chat-prompt="Tư vấn chất liệu và màu sắc">
+        🎨 Chất liệu và màu sắc
+      </button>
+
+      <button type="button"
+              data-chat-prompt="Tôi muốn biết cách đặt hàng">
+        🛍️ Hướng dẫn mua hàng
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- LIÊN HỆ TRỰC TIẾP -->
+  <div class="mg-chat-contact">
+
+    <span>Kết nối trực tiếp với MiuGo Pets</span>
+
+    <div class="mg-chat-contact-buttons">
+
+      <a id="chat-zalo-link"
+         href="#"
+         target="_blank"
+         rel="noopener">
+        Zalo
+      </a>
+
+      <a id="chat-facebook-link"
+         href="#"
+         target="_blank"
+         rel="noopener">
+        Facebook
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- Ô NHẬP TIN NHẮN -->
+  <form id="miugo-chat-form" class="mg-chat-form">
+
+    <input
+      id="miugo-chat-input"
+      type="text"
+      maxlength="500"
+      autocomplete="off"
+      placeholder="Nhập câu hỏi của bạn..."
+      required
+    >
+
+    <button type="submit" aria-label="Gửi tin nhắn">
+      ➤
+    </button>
+
+  </form>
+
+</section>
+
+<!-- ===== KẾT THÚC CHAT WIDGET ===== -->
+
+  <div id="ov" aria-hidden="true"></div>
+  <aside id="cart" aria-label="Giỏ hàng" aria-hidden="true">
+    <header><h3>Giỏ hàng</h3><button class="chip" id="closeCart" type="button">Đóng</button></header>
+    <div id="items"></div>
+    <div class="cf">
+      <div id="ship"></div><div class="pg"><div id="bar"></div></div>
+      <div class="tt"><span>Tạm tính</span><span id="tot">0₫</span></div>
+      <button class="btn" id="go" type="button">Đặt hàng</button>
+    </div>
+  </aside>
+
+  <!-- CHI TIẾT SẢN PHẨM TOÀN MÀN HÌNH -->
+<dialog id="productDialog" class="product-dialog">
+
+  <div class="detail-page">
+
+    <div class="detail-topbar">
+      <b>MiuGo Pets / Chi tiết sản phẩm</b>
+      <button class="dialog-close" id="closeProduct" type="button">×</button>
+    </div>
+
+    <div class="detail-container">
+
+      <!-- THÔNG TIN CHÍNH -->
+      <div class="detail-main">
+
+        <div class="detail-gallery">
+          <img id="detail-image"
+               class="detail-image"
+               src="images/placeholder.svg"
+               alt="Hình ảnh sản phẩm">
+               <!-- KHUNG XEM 3D VÀ AR -->
+<model-viewer
+    id="detail-model"
+    class="detail-model"
+    alt="Mô hình 3D sản phẩm MiuGo Pets"
+    camera-controls
+    auto-rotate
+    ar
+    ar-modes="scene-viewer webxr quick-look"
+    ar-placement="floor"
+    shadow-intensity="1"
+    hidden>
+
+    <button slot="ar-button" class="ar-button" type="button">
+        Đặt thử trong không gian thật
+    </button>
+
+</model-viewer>
+<p id="ar-hint" class="ar-hint" hidden>
+    📱 <strong>Mẹo trải nghiệm AR:</strong>
+    Bạn có thể xem và xoay mô hình 3D trên máy tính.
+    Để đặt thử sản phẩm vào không gian phòng bằng camera,
+    hãy mở website trên điện thoại hoặc máy tính bảng có hỗ trợ AR.
+</p>
+          
+
+          <p>Thiết kế dành cho không gian sống của mèo</p>
+        </div>
+
+        <div class="detail-info">
+
+          <span id="detail-category" class="detail-category"></span>
+
+          <h1 id="detail-name"></h1>
+
+          <p id="detail-description" class="detail-description"></p>
+
+          <div class="detail-price" id="detail-price"></div>
+
+          <!-- TÙY CHỈNH SẢN PHẨM -->
+          <div id="detail-customize" class="detail-customize">
+
+            <label for="detail-material">Chọn chất liệu</label>
+
+            <select id="detail-material">
+              <option value="carton">Carton</option>
+              <option value="wood">Gỗ (+30%)</option>
+            </select>
+
+            <label for="detail-color">Chọn màu sắc</label>
+
+            <select id="detail-color">
+              <option value="trang">Trắng</option>
+              <option value="den">Đen</option>
+              <option value="xanh-la">Xanh lá</option>
+              <option value="nau">Nâu</option>
+            </select> 
+<div id="detail-color-options" class="detail-color-options"></div>
+
+<p id="detail-color-label">
+  Màu sắc: Trắng
+</p>
+
+
+            <small id="detail-material-note">
+              Bạn có thể lựa chọn chất liệu phù hợp với nhu cầu.
+            </small>
+
+          </div>
+
+          <label for="detail-quantity">Số lượng</label>
+
+          <input id="detail-quantity"
+                 type="number"
+                 min="1"
+                 value="1"
+                 class="detail-quantity">
+
+          <div class="detail-actions">
+
+            <button class="btn" id="detail-add" type="button">
+              Thêm vào giỏ hàng
+            </button>
+
+            <button class="btn o" id="closeProduct2" type="button">
+              Tiếp tục xem
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- THÔNG TIN MODULE -->
+      <section id="detail-module-section" class="detail-section" hidden>
+
+        <h2>Cấu tạo và các module sản phẩm</h2>
+
+        <p id="detail-module-summary"></p>
+
+        <div id="detail-modules" class="detail-module-grid"></div>
+
+      </section>
+
+<!-- THÔNG TIN CHI TIẾT SẢN PHẨM -->
+<section id="detail-content-section" class="detail-section product-information">
+
+  <!-- MÔ TẢ SẢN PHẨM -->
+  <div class="product-info-block">
+    <h2>Mô tả sản phẩm</h2>
+    <div id="detail-product-description"></div>
+  </div>
+
+  <!-- TỔNG QUAN -->
+  <div class="product-info-block">
+    <h2>Tổng quan sản phẩm</h2>
+    <div id="detail-overview"></div>
+  </div>
+
+  <!-- THÔNG TIN CHI TIẾT -->
+  <div class="product-info-block">
+    <h2>Thông tin chi tiết</h2>
+    <div id="detail-specifications"></div>
+  </div>
+
+  <!-- KÍCH THƯỚC -->
+  <div class="product-info-block">
+    <h2>Kích thước sản phẩm</h2>
+    <div id="detail-dimensions"></div>
+  </div>
+
+</section>
+
+
+      <!-- ĐÁNH GIÁ KHÁCH HÀNG -->
+      <section class="detail-section" id="detail-reviews">
+
+        <h2>Đánh giá từ khách hàng</h2>
+
+        <div class="review-summary">
+
+          <strong id="detail-rating-average">—</strong>
+
+          <div>
+            <div id="detail-rating-stars" class="review-stars">
+              ☆☆☆☆☆
+            </div>
+
+            <small id="detail-rating-count">Chưa có đánh giá</small>
+          </div>
+
+        </div>
+
+        <div id="review-list" class="review-list"></div>
+
+        <!-- FORM ĐÁNH GIÁ -->
+        <form id="review-form" class="review-form">
+
+          <h3>Viết đánh giá của bạn</h3>
+
+          <input name="reviewer"
+                 type="text"
+                 placeholder="Tên khách hàng"
+                 required>
+
+          <label for="review-rating">Số sao đánh giá</label>
+
+          <select name="rating" id="review-rating" required>
+            <option value="5">5 sao - Rất hài lòng</option>
+            <option value="4">4 sao - Hài lòng</option>
+            <option value="3">3 sao - Bình thường</option>
+            <option value="2">2 sao - Chưa hài lòng</option>
+            <option value="1">1 sao - Không hài lòng</option>
+          </select>
+
+          <textarea name="comment"
+                    rows="4"
+                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
+                    required></textarea>
+
+          <button class="btn" type="submit">
+            Gửi đánh giá
+          </button>
+
+        </form>
+
+      </section>
+
+    </div>
+  </div>
+
+</dialog>
+
+  
+<!-- ===== THANH TOÁN MIUGO PETS ===== -->
+<dialog id="ck" class="checkout-dialog">
+
+  <div class="checkout-page">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="checkout-header">
+      <div>
+        <h1>Thanh toán</h1>
+        <p>Điền thông tin giao hàng và lựa chọn phương thức thanh toán.</p>
+      </div>
+
+      <button id="backToCart" type="button" class="checkout-back">
+        ← Quay lại giỏ hàng
+      </button>
+    </div>
+
+    <!-- FORM THANH TOÁN -->
+    <form id="fo" class="checkout-form">
+
+      <div id="checkout-form-step" class="checkout-layout">
+
+        <!-- THÔNG TIN KHÁCH HÀNG -->
+        <section class="checkout-customer">
+
+          <h2>Thông tin nhận hàng</h2>
+
+          <div class="checkout-field">
+            <label for="checkout-name">Họ tên *</label>
+            <input
+              id="checkout-name"
+              name="name"
+              type="text"
+              placeholder="Nhập họ và tên"
+              required
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="checkout-field">
+            <label for="checkout-address">Địa chỉ *</label>
+            <input
+              id="checkout-address"
+              name="addr"
+              type="text"
+              placeholder="Số nhà, đường, phường/xã, quận/huyện..."
+              required
+              autocomplete="street-address"
+            >
+          </div>
+
+          <div class="checkout-field">
+            <label for="checkout-phone">Số điện thoại *</label>
+            <input
+              id="checkout-phone"
+              name="phone"
+              type="tel"
+              placeholder="Nhập số điện thoại"
+              required
+              autocomplete="tel"
+              pattern="[0-9 +()-]{9,16}"
+            >
+          </div>
+
+          <div class="checkout-field">
+            <label for="checkout-email">Địa chỉ email *</label>
+            <input
+              id="checkout-email"
+              name="email"
+              type="email"
+              placeholder="Nhập email"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="checkout-field">
+            <label for="checkout-note">Ghi chú đơn hàng</label>
+            <textarea
+              id="checkout-note"
+              name="note"
+              rows="4"
+              placeholder="Ghi chú thêm cho MiuGo Pets (không bắt buộc)"
+            ></textarea>
+          </div>
+
+        </section>
+
+        <!-- ĐƠN HÀNG -->
+        <aside class="checkout-summary">
+
+          <h2>Đơn hàng của bạn</h2>
+
+          <div id="checkout-items" class="checkout-items"></div>
+
+          <div class="checkout-total-row">
+            <span>Tạm tính</span>
+            <b id="checkout-subtotal">0₫</b>
+          </div>
+
+          <div class="checkout-total-row checkout-grand-total">
+            <span>Tổng thanh toán</span>
+            <b id="checkout-total">0₫</b>
+          </div>
+
+          <!-- PHƯƠNG THỨC THANH TOÁN -->
+          <div class="checkout-payment">
+
+            <h3>Phương thức thanh toán</h3>
+
+            <label class="checkout-payment-option">
+              <input
+                type="radio"
+                name="pay"
+                value="transfer"
+                checked
+              >
+              <span>
+                <b>💳 Chuyển khoản online</b>
+                <small>Thanh toán bằng mã QR ngân hàng</small>
+              </span>
+            </label>
+
+            <label class="checkout-payment-option">
+              <input
+                type="radio"
+                name="pay"
+                value="cod"
+              >
+              <span>
+                <b>📦 Thanh toán khi nhận hàng (COD)</b>
+                <small>Thanh toán bằng tiền mặt khi nhận hàng</small>
+              </span>
+            </label>
+
+          </div>
+
+          <!-- QR HIỆN KHI CHỌN CHUYỂN KHOẢN -->
+          <div id="checkout-transfer-preview"
+               class="checkout-transfer-preview">
+
+            <h3>Thông tin chuyển khoản</h3>
+
+            <div class="checkout-qr">
+
+              <img
+                src="images/payment/qr-chuyenkhoan.png"
+                alt="Mã QR chuyển khoản MiuGo Pets"
+                onerror="this.hidden=true; this.nextElementSibling.hidden=false;"
+              >
+
+              <div class="checkout-qr-placeholder" hidden>
+                <b>Ảnh mã QR của MiuGo Pets</b>
+                <small>Bạn sẽ thêm ảnh QR vào đây sau.</small>
+              </div>
+
+            </div>
+
+            <p>
+              *Lưu ý: Không chuyển khoản vào đây, đây là web demo. Chúng tôi không chịu trách nhiệm nếu bạn chuyển tiền vào đây.
+            </p>
+
+          </div>
+
+          <!-- THÔNG BÁO COD -->
+          <div id="checkout-cod-note" class="checkout-cod-note" hidden>
+            Bạn vui lòng chuẩn bị tiền mặt để thanh toán khi nhận hàng.
+          </div>
+
+          <button class="btn checkout-submit" type="submit">
+            Đặt hàng →
+          </button>
+
+          <p class="checkout-secure-note">
+            MiuGo Pets cảm ơn bạn đã tin tưởng lựa chọn chúng tôi.
+          </p>
+
+        </aside>
+
+      </div>
+
+    </form>
+
+    <!-- BƯỚC XÁC NHẬN CHUYỂN KHOẢN -->
+    <section id="checkout-transfer-step"
+             class="checkout-result"
+             hidden>
+
+      <div class="checkout-result-card">
+
+        <div class="checkout-result-icon">₫</div>
+
+        <h2>Hoàn tất thanh toán chuyển khoản</h2>
+
+        <p>
+          Vui lòng quét mã QR bên dưới để chuyển khoản cho đơn hàng.
+        </p>
+
+        <div class="checkout-order-code">
+          Mã đơn hàng:
+          <b id="checkout-order-code"></b>
+        </div>
+
+        <div class="checkout-qr checkout-qr-large">
+
+          <img
+            src="images/payment/qr-chuyenkhoan.png"
+            alt="Mã QR chuyển khoản MiuGo Pets"
+            onerror="this.hidden=true; this.nextElementSibling.hidden=false;"
+          >
+
+          <div class="checkout-qr-placeholder" hidden>
+            <b>Ảnh mã QR của MiuGo Pets</b>
+            <small>Chờ cập nhật ảnh chuyển khoản.</small>
+          </div>
+
+        </div>
+
+        <div class="checkout-transfer-amount">
+          Số tiền cần chuyển
+          <b id="checkout-transfer-amount">0₫</b>
+        </div>
+
+        <p id="checkout-transfer-reference"></p>
+
+        <p class="checkout-demo-note">
+          Sau khi thực hiện chuyển khoản, hãy bấm nút xác nhận bên dưới.
+        </p>
+
+        <button id="confirm-transfer" type="button" class="btn">
+          Tôi đã chuyển tiền
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- TRẠNG THÁI ĐƠN HÀNG -->
+    <section id="checkout-status-step"
+             class="checkout-result"
+             hidden>
+
+      <div class="checkout-result-card">
+
+        <div class="checkout-success-icon">✓</div>
+
+        <h2 id="checkout-status-heading">
+          Đơn hàng đang được giao đến bạn!
+        </h2>
+
+        <p id="checkout-status-message"></p>
+
+        <div class="checkout-order-code">
+          <b id="checkout-status-order"></b>
+        </div>
+
+        <p id="checkout-status-payment"></p>
+
+        <p class="checkout-demo-note">
+          Đây là trạng thái mô phỏng của website demo MiuGo Pets.
+          Website chưa kết nối hệ thống quản lý đơn hàng hoặc vận chuyển thực tế.
+        </p>
+
+        <button id="finish-checkout" type="button" class="btn">
+          Tiếp tục mua sắm
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</dialog>
+<!-- ===== KẾT THÚC THANH TOÁN ===== -->
+
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
