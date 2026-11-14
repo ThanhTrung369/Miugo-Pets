@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#ebdfb9"/>
+  <path d="M170 260 L215 180 L270 235 Q300 220 330 235 L385 180 L430 260 L430 410 L170 410Z" fill="#7a8a3d"/>
+  <circle cx="255" cy="305" r="13" fill="#fffdf6"/><circle cx="345" cy="305" r="13" fill="#fffdf6"/>
+  <path d="M280 345 Q300 365 320 345" fill="none" stroke="#fffdf6" stroke-width="9" stroke-linecap="round"/>
+  <text x="300" y="490" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#2b3018">MiuGo Pets</text>
+</svg>
