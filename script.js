@@ -12,11 +12,11 @@
 const CFG = {
   GA: 'G-WL6D97PGV2',          // Mã Google Analytics
   ZALO: '0900000000',          // Số điện thoại Zalo
-  EMAIL: 'hello@miugopets.vn', // Email liên hệ
+  EMAIL: 'miugopets@gmail.com', // Email liên hệ
   FORM: '',                    // Link Formspree
   FREE: 299000,                // Ngưỡng miễn phí vận chuyển
 
-  TIKTOK: 'https://www.tiktok.com/',
+  TIKTOK: 'https://tiktok.com/@miugopets',
   FACEBOOK: 'https://www.facebook.com/profile.php?id=61596723083649',
 
   HOURS: '8:00 – 21:00 mỗi ngày'
