@@ -3081,6 +3081,65 @@ function setupEvents() {
     if (action === 'add') addToCart(id);
     if (action === 'detail') openProductDetail(id);
   });
+  /* =========================================
+   THÊM SẢN PHẨM VÀO GIỎ TỪ CHI TIẾT SẢN PHẨM
+========================================= */
+
+bind('#detail-add', 'click', () => {
+
+  // Lấy sản phẩm đang mở
+  const productId = currentDetailProductId;
+
+  if (!productId) {
+
+    showToast('Không xác định được sản phẩm.');
+
+    return;
+  }
+
+  const product = getProduct(productId);
+
+  if (!product) {
+
+    showToast('Không tìm thấy sản phẩm.');
+
+    return;
+  }
+
+
+  // Lấy số lượng khách hàng chọn
+  const quantityInput = $('#detail-quantity');
+
+  const quantity = Math.max(
+    1,
+    Math.floor(Number(quantityInput?.value) || 1)
+  );
+
+
+  // Lấy chất liệu và màu sắc
+  let material = 'none';
+
+  let color = 'none';
+
+
+  if (isCustomizableModuleProduct(product)) {
+
+    material = $('#detail-material')?.value || 'carton';
+
+    color = $('#detail-color')?.value || 'trang';
+
+  }
+
+
+  // Thêm sản phẩm vào giỏ hàng
+  addToCart(
+    productId,
+    material,
+    color,
+    quantity
+  );
+
+});
 
   // GIỎ HÀNG - dùng chung hai trang
   bind('#items', 'click', (event) => {
