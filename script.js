@@ -21,6 +21,61 @@ const CFG = {
 
   HOURS: '8:00 – 21:00 mỗi ngày'
 };
+/* =====================================================
+   HỆ THỐNG MÃ GIẢM GIÁ MIUGO PETS
+===================================================== */
+
+/*
+  type:
+  - percent: Giảm theo phần trăm.
+  - fixed: Giảm số tiền cố định.
+
+  value: Mức giảm giá.
+  minOrder: Giá trị đơn tối thiểu.
+  maxDiscount: Mức giảm tối đa (0 = không giới hạn).
+  active: true = bật, false = tắt.
+*/
+
+const VOUCHERS = {
+
+  // ===== VOUCHER 1: GIẢM 10% =====
+
+  'MIUGO10': {
+
+    type: 'percent',
+
+    value: 10,
+
+    minOrder: 100000,
+
+    maxDiscount: 50000,
+
+    active: true
+
+  },
+
+
+  // ===== VOUCHER 2: GIẢM 50.000Đ =====
+
+  'MIUGO50000': {
+
+    type: 'fixed',
+
+    value: 50000,
+
+    minOrder: 300000,
+
+    maxDiscount: 0,
+
+    active: true
+
+  },
+
+
+  // ===== THÊM VOUCHER MỚI TẠI ĐÂY =====
+
+
+};
 /* ===== DANH MỤC SẢN PHẨM ===== */
 
 const CATEGORIES = {
@@ -40,7 +95,7 @@ const CATEGORIES = {
 
 const PRODUCT_GROUP_FILTERS = {
   all: 'Tất cả',
-  nha: 'Nhà & Module lắp ghép cho mèo',
+  nha: 'Nhà & Module lắp sẵn cho mèo',
   'module-le': 'Module riêng lẻ',
   phukien: 'Phụ kiện & Đồ dùng cho mèo'
 };
@@ -837,12 +892,103 @@ const MODULES = [
 /* ===== CẤU HÌNH BỘ MODULE THEO SẢN PHẨM ===== */
 
 const PRODUCT_MODULE_SUMMARIES = {
-  m1: 'Bộ module ghép tự do kết hợp 5 kiểu module bên dưới, bạn có thể sáng tạo tùy thích theo ý mình. ',
+  m1: 'Bộ module được cấu tạo từ các kiểu module bên dưới đây, bạn có thể sáng tạo tùy thích theo ý mình và mở rộng theo ý muốn. ',
 
-  m2: 'Sản phẩm được thiết kế dạng tháp 3 tầng, được kết hợp nhiều module, bạn có thể sáng tạo tùy thích theo ý mình.',
+  m2: 'Sản phẩm được thiết kế dạng tháp 3 tầng, được kết hợp nhiều module, bạn có thể sáng tạo tùy thích theo ý mình với các module ở bên dưới.',
 
-  m3: 'Theo mô tả sản phẩm: gồm 2 dốc leo và 4 module hình hộp, bạn có thể sáng tạo tùy thích theo ý mình.',
+  m3: 'Sản phẩm gồm 2 dốc leo và 4 module hình hộp, bạn có thể sáng tạo tùy thích và kết hợp các module mở rộng theo ý mình ở bên dưới.',
 
+
+};
+/* =====================================================
+   CẤU TẠO MODULE RIÊNG CHO TỪNG SẢN PHẨM
+===================================================== */
+
+/*
+  Mỗi sản phẩm có danh sách module riêng.
+
+  moduleId: Mã module lấy từ danh sách MODULES.
+  quantity: Số lượng module đó trong sản phẩm.
+
+  Có thể thêm, xóa hoặc thay đổi số lượng tùy ý.
+*/
+
+const PRODUCT_MODULE_COMPOSITIONS = {
+
+  // ===== SẢN PHẨM M1: KITTEN CASTLE =====
+  m1: [
+
+    {
+      moduleId: 'module-1',
+      quantity: 3
+    },
+
+    {
+      moduleId: 'module-2',
+      quantity: 1
+    },
+
+    
+
+  ],
+
+
+  // ===== SẢN PHẨM M2: MODULE THÁP =====
+  m2: [
+
+    {
+      moduleId: 'module-1',
+      quantity: 7
+    },
+    {
+      moduleId: 'module-2',
+      quantity: 5
+    },
+    {
+      moduleId: 'module-3',
+      quantity: 2
+    },
+    {
+      moduleId: 'module-4',
+      quantity: 2
+    },
+
+  ],
+
+
+  // ===== SẢN PHẨM M3: DỐC LEO VÀ HẦM NGỦ =====
+  m3: [
+
+   {
+      moduleId: 'module-1',
+      quantity: 4
+    },
+    {
+      moduleId: 'module-2',
+      quantity: 1
+    },
+    {
+      moduleId: 'module-3',
+      quantity: 2
+    },
+
+  ],
+
+
+  // ===== SẢN PHẨM M4 =====
+  m4: [
+
+    // Thêm các module cấu thành sản phẩm tại đây.
+
+  ],
+
+
+  // ===== SẢN PHẨM M5 =====
+  m5: [
+
+    // Thêm các module cấu thành sản phẩm tại đây.
+
+  ]
 
 };
 
@@ -937,6 +1083,7 @@ let searchText = '';
 let sortMode = '';
 let cart = {};
 let currentDetailProductId = null;
+let appliedVoucherCode = '';
 let currentDetailMaterial = 'carton';
 let currentDetailColor = 'trang';
 // Trạng thái đơn hàng thanh toán demo
@@ -947,6 +1094,19 @@ try {
   if (!cart || typeof cart !== 'object' || Array.isArray(cart)) cart = {};
 } catch (error) {
   cart = {};
+}
+// Khôi phục voucher đã áp dụng
+
+try {
+
+  appliedVoucherCode = (
+    localStorage.getItem('miugo-applied-voucher') || ''
+  ).toUpperCase();
+
+} catch (error) {
+
+  appliedVoucherCode = '';
+
 }
 
 /* ==========================================================
@@ -1197,34 +1357,164 @@ function renderProducts() {
    CHI TIẾT SẢN PHẨM
 ===================================================== */
 
-function renderModuleSection(product) {
-  const section = $('#detail-module-section');
-  const summary = PRODUCT_MODULE_SUMMARIES[product.id];
+/* =====================================================
+   HIỂN THỊ CẤU TẠO MODULE RIÊNG CỦA SẢN PHẨM
+===================================================== */
 
-  if (!summary) {
-    section.hidden = true;
+function renderModuleSection(product) {
+
+  const section = $('#detail-module-section');
+
+  // Chỉ áp dụng cho danh mục Nhà & module
+  if (!section || product.category !== 'nha') {
+
+    if (section) {
+      section.hidden = true;
+    }
+
     return;
   }
 
   section.hidden = false;
 
-  $('#detail-module-summary').textContent = summary;
+
+  // ===== HIỂN THỊ GIỚI THIỆU MODULE =====
+
+  const summary = PRODUCT_MODULE_SUMMARIES[product.id];
+
+  $('#detail-module-summary').textContent =
+    summary || 'Các module thành phần của sản phẩm được giới thiệu bên dưới.';
+
+
+  // ===== LẤY CẤU TẠO RIÊNG CỦA SẢN PHẨM =====
+
+  const composition =
+    PRODUCT_MODULE_COMPOSITIONS[product.id] || [];
+
+
+  // Tìm thông tin từng module trong danh sách MODULES
+
+  const selectedModules = composition.map(item => {
+
+    const module = MODULES.find(
+      m => m.id === item.moduleId
+    );
+
+    // Bỏ qua module không tồn tại
+    if (!module) return null;
+
+    return {
+
+      ...module,
+
+      quantity: Math.max(
+        1,
+        Math.floor(Number(item.quantity) || 1)
+      )
+
+    };
+
+  }).filter(Boolean);
+
+
+  // ===== HIỂN THỊ KHU VỰC CẤU TẠO SẢN PHẨM =====
+
+  const compositionSection =
+    $('#detail-product-composition');
+
+  const compositionGrid =
+    $('#detail-product-composition-grid');
+
+  const compositionCount =
+    $('#detail-product-composition-count');
+
+
+  if (selectedModules.length > 0) {
+
+    compositionSection.hidden = false;
+
+
+    // Tính tổng số module
+
+    const totalModules = selectedModules.reduce(
+      (total, module) => total + module.quantity,
+      0
+    );
+
+
+    compositionCount.textContent =
+      `Tổng cộng ${totalModules} module`;
+
+
+    // Hiển thị từng module cấu thành sản phẩm
+
+    compositionGrid.innerHTML = selectedModules.map(module => `
+
+      <div class="module-card composition-module-card">
+
+        <img
+          src="${escapeHTML(module.image)}"
+          alt="${escapeHTML(module.name)}"
+          onerror="this.hidden=true"
+        >
+
+        <span class="module-count">
+          Số lượng: ${module.quantity}
+        </span>
+
+        <h3>
+          ${escapeHTML(module.name)}
+        </h3>
+
+        <p>
+          ${escapeHTML(module.description)}
+        </p>
+
+        <p>
+          <b>Kích thước: 27 × 27 × 27 cm</b>
+        </p>
+
+      </div>
+
+    `).join('');
+
+  } else {
+
+    // Chưa cấu hình cấu tạo cho sản phẩm này
+
+    compositionSection.hidden = true;
+
+    compositionGrid.innerHTML = '';
+
+    compositionCount.textContent = '';
+
+  }
+
+
+  // ===== GIỮ NGUYÊN THƯ VIỆN 13 MODULE HIỆN CÓ =====
 
   $('#detail-modules').innerHTML = MODULES.map(module => `
+
     <div class="module-card">
 
-      <img src="${escapeHTML(module.image)}"
-           alt="${escapeHTML(module.name)}"
-           onerror="this.hidden=true">
+      <img
+        src="${escapeHTML(module.image)}"
+        alt="${escapeHTML(module.name)}"
+        onerror="this.hidden=true"
+      >
 
       <h3>${escapeHTML(module.name)}</h3>
 
       <p>${escapeHTML(module.description)}</p>
 
-      <p><b>Kích thước: 27 × 27 × 27 cm</b></p>
+      <p>
+        <b>Kích thước: 27 × 27 × 27 cm</b>
+      </p>
 
     </div>
+
   `).join('');
+
 }
 
 
@@ -1833,7 +2123,432 @@ function getCartTotal() {
   }, 0);
 }
 
+/* =====================================================
+   XỬ LÝ MÃ GIẢM GIÁ
+===================================================== */
 
+
+/* ===== KIỂM TRA VOUCHER ===== */
+
+function getVoucherInfo(code, subtotal = getCartTotal()) {
+
+  const normalizedCode = String(code || '')
+    .trim()
+    .toUpperCase();
+
+  if (!normalizedCode) {
+
+    return {
+      valid: false,
+      reason: 'empty',
+      discount: 0
+    };
+
+  }
+
+  if (subtotal <= 0) {
+
+    return {
+      valid: false,
+      reason: 'empty-cart',
+      discount: 0
+    };
+
+  }
+
+  const voucher = VOUCHERS[normalizedCode];
+
+  if (!voucher || voucher.active === false) {
+
+    return {
+      valid: false,
+      reason: 'invalid',
+      discount: 0
+    };
+
+  }
+
+  const minOrder = Math.max(
+    0,
+    Number(voucher.minOrder) || 0
+  );
+
+  // Kiểm tra giá trị đơn tối thiểu
+
+  if (subtotal < minOrder) {
+
+    return {
+      valid: false,
+      reason: 'minimum',
+      minOrder: minOrder,
+      discount: 0
+    };
+
+  }
+
+  const value = Math.max(
+    0,
+    Number(voucher.value) || 0
+  );
+
+  let discount = 0;
+
+  // Giảm theo phần trăm
+
+  if (voucher.type === 'percent') {
+
+    discount = Math.round(
+      subtotal * Math.min(value, 100) / 100
+    );
+
+  }
+
+  // Giảm số tiền cố định
+
+  else if (voucher.type === 'fixed') {
+
+    discount = value;
+
+  }
+
+  else {
+
+    return {
+      valid: false,
+      reason: 'invalid-value',
+      discount: 0
+    };
+
+  }
+
+  // Áp dụng mức giảm tối đa
+
+  const maxDiscount = Number(voucher.maxDiscount) || 0;
+
+  if (maxDiscount > 0) {
+
+    discount = Math.min(
+      discount,
+      maxDiscount
+    );
+
+  }
+
+  // Không cho giảm nhiều hơn giá trị đơn hàng
+
+  discount = Math.min(
+    subtotal,
+    Math.max(0, Math.round(discount))
+  );
+
+  if (discount <= 0) {
+
+    return {
+      valid: false,
+      reason: 'invalid-value',
+      discount: 0
+    };
+
+  }
+
+  return {
+
+    valid: true,
+
+    code: normalizedCode,
+
+    voucher: voucher,
+
+    discount: discount
+
+  };
+
+}
+
+
+/* ===== TÍNH TIỀN ĐƯỢC GIẢM ===== */
+
+function getVoucherDiscount(subtotal = getCartTotal()) {
+
+  const info = getVoucherInfo(
+    appliedVoucherCode,
+    subtotal
+  );
+
+  return info.valid ? info.discount : 0;
+
+}
+
+
+/* ===== TÍNH TỔNG THANH TOÁN SAU GIẢM ===== */
+
+function getCartPayableTotal() {
+
+  const subtotal = getCartTotal();
+
+  const discount = getVoucherDiscount(subtotal);
+
+  return Math.max(
+    0,
+    subtotal - discount
+  );
+
+}
+
+
+/* ===== ĐỒNG BỘ VOUCHER TRÊN GIAO DIỆN ===== */
+
+function updateVoucherUI(subtotal = getCartTotal()) {
+
+  // Giỏ hàng trống thì bỏ voucher đã lưu
+
+  if (subtotal <= 0 && appliedVoucherCode) {
+
+    appliedVoucherCode = '';
+
+    try {
+      localStorage.removeItem('miugo-applied-voucher');
+    } catch (error) {}
+
+  }
+
+  const info = appliedVoucherCode
+    ? getVoucherInfo(appliedVoucherCode, subtotal)
+    : { valid: false, reason: 'empty', discount: 0 };
+
+
+  let message = 'Nhập mã ưu đãi để được giảm giá.';
+
+  if (appliedVoucherCode) {
+
+    if (info.valid) {
+
+      message =
+        'Đã áp dụng mã ' +
+        info.code +
+        '. Bạn được giảm ' +
+        formatPrice(info.discount) + '.';
+
+    }
+
+    else if (info.reason === 'minimum') {
+
+      message =
+        'Đơn hàng cần đạt tối thiểu ' +
+        formatPrice(info.minOrder) +
+        ' để sử dụng mã này.';
+
+    }
+
+    else if (info.reason === 'empty-cart') {
+
+      message = 'Vui lòng thêm sản phẩm vào giỏ hàng.';
+
+    }
+
+    else {
+
+      message = 'Mã voucher không hợp lệ hoặc đã ngừng hoạt động.';
+
+    }
+
+  }
+
+
+  // Hai vị trí sử dụng chung một voucher
+
+  const locations = [
+
+    {
+      input: '#cart-voucher-input',
+      status: '#cart-voucher-message',
+      remove: '#cart-voucher-remove'
+    },
+
+    {
+      input: '#checkout-voucher-input',
+      status: '#checkout-voucher-message',
+      remove: '#checkout-voucher-remove'
+    }
+
+  ];
+
+
+  locations.forEach(location => {
+
+    const input = $(location.input);
+
+    const status = $(location.status);
+
+    const remove = $(location.remove);
+
+
+    if (input) {
+
+      input.value = appliedVoucherCode;
+
+    }
+
+    if (status) {
+
+      status.textContent = message;
+
+      status.classList.toggle(
+        'is-success',
+        info.valid
+      );
+
+      status.classList.toggle(
+        'is-error',
+        Boolean(appliedVoucherCode) && !info.valid
+      );
+
+    }
+
+    if (remove) {
+
+      remove.hidden = !appliedVoucherCode;
+
+    }
+
+  });
+
+}
+
+
+/* ===== ÁP DỤNG VOUCHER ===== */
+
+function applyVoucherFromInput(inputSelector, statusSelector) {
+
+  const input = $(inputSelector);
+
+  const status = $(statusSelector);
+
+  if (!input) return;
+
+  const code = input.value.trim().toUpperCase();
+
+  if (!code) {
+
+    if (status) {
+
+      status.textContent = 'Vui lòng nhập mã voucher.';
+
+      status.classList.add('is-error');
+
+    }
+
+    return;
+
+  }
+
+
+  const info = getVoucherInfo(code);
+
+
+  // Mã không hợp lệ
+
+  if (!info.valid) {
+
+    let message = 'Mã voucher không hợp lệ.';
+
+    if (info.reason === 'minimum') {
+
+      message =
+        'Đơn hàng phải từ ' +
+        formatPrice(info.minOrder) +
+        ' mới sử dụng được mã này.';
+
+    }
+
+    else if (info.reason === 'empty-cart') {
+
+      message = 'Bạn chưa có sản phẩm trong giỏ hàng.';
+
+    }
+
+    else if (info.reason === 'invalid-value') {
+
+      message = 'Mã giảm giá chưa được cấu hình hợp lệ.';
+
+    }
+
+
+    if (status) {
+
+      status.textContent = message;
+
+      status.classList.remove('is-success');
+
+      status.classList.add('is-error');
+
+    }
+
+
+    // Giữ nguyên voucher cũ nếu có
+
+    if (appliedVoucherCode) {
+
+      input.value = appliedVoucherCode;
+
+    }
+
+    return;
+
+  }
+
+
+  // Lưu voucher mới
+
+  appliedVoucherCode = info.code;
+
+  try {
+
+    localStorage.setItem(
+      'miugo-applied-voucher',
+      appliedVoucherCode
+    );
+
+  } catch (error) {}
+
+
+  // Cập nhật cả giỏ hàng và thanh toán
+
+  renderCart();
+
+  renderCheckoutSummary();
+
+
+  showToast(
+    'Áp dụng voucher thành công! Giảm ' +
+    formatPrice(info.discount)
+  );
+
+}
+
+
+/* ===== GỠ VOUCHER ===== */
+
+function removeAppliedVoucher() {
+
+  appliedVoucherCode = '';
+
+  try {
+
+    localStorage.removeItem(
+      'miugo-applied-voucher'
+    );
+
+  } catch (error) {}
+
+
+  renderCart();
+
+  renderCheckoutSummary();
+
+  showToast('Đã gỡ mã giảm giá.');
+
+}
 /* ===== LƯU VÀ HIỂN THỊ GIỎ HÀNG ===== */
 
 function saveAndRenderCart() {
@@ -1850,8 +2565,15 @@ function saveAndRenderCart() {
 /* ===== HIỂN THỊ GIỎ HÀNG ===== */
 
 function renderCart() {
+
   const entries = getCartEntries();
-  const total = getCartTotal();
+
+  const subtotal = getCartTotal();
+
+  const discount = getVoucherDiscount(subtotal);
+
+  const total = Math.max(0, subtotal - discount);
+
 
   const count = entries.reduce(
     (sum, entry) => sum + entry.quantity,
@@ -1859,6 +2581,7 @@ function renderCart() {
   );
 
   $('#cnt').textContent = count;
+
 
   $('#items').innerHTML = entries.map(entry => {
 
@@ -1874,14 +2597,18 @@ function renderCart() {
       COLOR_LABELS[entry.color]
     ].filter(Boolean).join(' / ');
 
+
     return `
       <div class="ci">
 
-        <img src="${escapeHTML(product.image)}"
-             alt="${escapeHTML(product.name)}"
-             onerror="this.src='images/placeholder.svg'">
+        <img
+          src="${escapeHTML(product.image)}"
+          alt="${escapeHTML(product.name)}"
+          onerror="this.src='images/placeholder.svg'"
+        >
 
         <div>
+
           <b>${escapeHTML(product.name)}</b>
 
           ${options
@@ -1890,21 +2617,24 @@ function renderCart() {
           }
 
           <br>${formatPrice(unitPrice)}
+
         </div>
 
         <div class="q">
 
-          <button type="button"
-                  data-cart-action="minus"
-                  data-id="${escapeHTML(entry.key)}">
+          <button
+            type="button"
+            data-cart-action="minus"
+            data-id="${escapeHTML(entry.key)}">
             −
           </button>
 
           ${entry.quantity}
 
-          <button type="button"
-                  data-cart-action="plus"
-                  data-id="${escapeHTML(entry.key)}">
+          <button
+            type="button"
+            data-cart-action="plus"
+            data-id="${escapeHTML(entry.key)}">
             +
           </button>
 
@@ -1914,18 +2644,54 @@ function renderCart() {
     `;
 
   }).join('') ||
+
     '<p style="padding:20px 0">Giỏ hàng đang trống. Chọn một sản phẩm để bắt đầu.</p>';
 
-  $('#tot').textContent = formatPrice(total);
 
-  $('#ship').innerHTML = total >= CFG.FREE
+  // ===== HIỂN THỊ TỔNG TIỀN =====
+
+  $('#cart-subtotal').textContent =
+    formatPrice(subtotal);
+
+
+  const discountRow = $('#cart-discount-row');
+
+  if (discountRow) {
+
+    discountRow.hidden = discount <= 0;
+
+  }
+
+
+  $('#cart-discount').textContent =
+    '-' + formatPrice(discount);
+
+
+  $('#tot').textContent =
+    formatPrice(total);
+
+
+  // ===== THÔNG TIN VẬN CHUYỂN =====
+
+  $('#ship').innerHTML = subtotal >= CFG.FREE
+
     ? 'Đơn của bạn được miễn phí giao hàng'
-    : `Mua thêm <b>${formatPrice(CFG.FREE - total)}</b> để được miễn phí giao hàng`;
+
+    : `Mua thêm <b>${formatPrice(CFG.FREE - subtotal)}</b> để được miễn phí giao hàng`;
+
 
   $('#bar').style.width =
-    Math.min(100, total / CFG.FREE * 100) + '%';
+
+    Math.min(100, subtotal / CFG.FREE * 100) + '%';
+
 
   $('#go').disabled = total <= 0;
+
+
+  // Đồng bộ mã voucher
+
+  updateVoucherUI(subtotal);
+
 }
 
 function toggleCart(open) {
@@ -1933,7 +2699,10 @@ function toggleCart(open) {
   $('#ov').classList.toggle('on', Boolean(open));
   $('#cart').setAttribute('aria-hidden', String(!open));
   $('#ov').setAttribute('aria-hidden', String(!open));
-  if (open) gtag('event', 'view_cart', { currency: 'VND', value: getCartTotal() });
+  if (open) gtag('event', 'view_cart', {
+  currency: 'VND',
+  value: getCartPayableTotal()
+});
 }
 
 /* ===== THÔNG BÁO NHỎ ===== */
@@ -1972,15 +2741,23 @@ async function sendMessage(subject, body) {
    MIUGO PETS - THANH TOÁN DEMO
 ===================================================== */
 
-// Hiển thị danh sách sản phẩm trong thanh toán
+/* ===== HIỂN THỊ ĐƠN HÀNG THANH TOÁN ===== */
+
 function renderCheckoutSummary() {
 
   const container = $('#checkout-items');
 
   if (!container) return;
 
+
   const entries = getCartEntries();
-  const total = getCartTotal();
+
+  const subtotal = getCartTotal();
+
+  const discount = getVoucherDiscount(subtotal);
+
+  const total = Math.max(0, subtotal - discount);
+
 
   container.innerHTML = entries.map(entry => {
 
@@ -1995,6 +2772,7 @@ function renderCheckoutSummary() {
       MATERIAL_LABELS[entry.material],
       COLOR_LABELS[entry.color]
     ].filter(Boolean).join(' / ');
+
 
     return `
       <div class="checkout-item">
@@ -2025,8 +2803,37 @@ function renderCheckoutSummary() {
 
   }).join('');
 
-  $('#checkout-subtotal').textContent = formatPrice(total);
-  $('#checkout-total').textContent = formatPrice(total);
+
+  // Tạm tính
+
+  $('#checkout-subtotal').textContent =
+    formatPrice(subtotal);
+
+
+  // Tiền được giảm
+
+  const discountRow = $('#checkout-discount-row');
+
+  if (discountRow) {
+
+    discountRow.hidden = discount <= 0;
+
+  }
+
+  $('#checkout-discount').textContent =
+    '-' + formatPrice(discount);
+
+
+  // Tổng tiền khách phải trả
+
+  $('#checkout-total').textContent =
+    formatPrice(total);
+
+
+  // Đồng bộ voucher giữa hai giao diện
+
+  updateVoucherUI(subtotal);
+
 }
 
 
@@ -2152,8 +2959,11 @@ function handleCheckoutSubmit(event) {
 
   const formData = new FormData(event.currentTarget);
 
-  const total = getCartTotal();
+  const subtotal = getCartTotal();
 
+const discount = getVoucherDiscount(subtotal);
+
+const total = Math.max(0, subtotal - discount);
   const method = formData.get('pay') || 'transfer';
 
   // Tạo mã đơn hàng mô phỏng
@@ -2161,19 +2971,29 @@ function handleCheckoutSubmit(event) {
 
   currentDemoOrder = {
 
-    id: orderId,
+  id: orderId,
 
-    name: formData.get('name'),
-    phone: formData.get('phone'),
-    email: formData.get('email'),
-    address: formData.get('addr'),
-    note: formData.get('note'),
+  name: formData.get('name'),
+  phone: formData.get('phone'),
+  email: formData.get('email'),
+  address: formData.get('addr'),
+  note: formData.get('note'),
 
-    total: total,
+  // Giá trị ban đầu
+  subtotal: subtotal,
 
-    payment: method
+  // Số tiền giảm
+  discount: discount,
 
-  };
+  // Mã voucher đã sử dụng
+  voucherCode: appliedVoucherCode,
+
+  // Số tiền khách thực tế phải trả
+  total: total,
+
+  payment: method
+
+};
 
   // Nếu chuyển khoản: chuyển sang bước hiển thị QR
   if (method === 'transfer') {
@@ -2276,13 +3096,72 @@ function setupEvents() {
   bind('#cb', 'click', () => toggleCart(true));
   bind('#closeCart', 'click', () => toggleCart(false));
   bind('#ov', 'click', () => toggleCart(false));
+  // ===== SỰ KIỆN VOUCHER GIỎ HÀNG =====
+
+bind('#cart-voucher-apply', 'click', () => {
+
+  applyVoucherFromInput(
+    '#cart-voucher-input',
+    '#cart-voucher-message'
+  );
+
+});
+
+bind('#cart-voucher-remove', 'click', removeAppliedVoucher);
+
+
+// ===== SỰ KIỆN VOUCHER THANH TOÁN =====
+
+bind('#checkout-voucher-apply', 'click', () => {
+
+  applyVoucherFromInput(
+    '#checkout-voucher-input',
+    '#checkout-voucher-message'
+  );
+
+});
+
+bind('#checkout-voucher-remove', 'click', removeAppliedVoucher);
+
+
+// ===== NHẤN ENTER ĐỂ ÁP DỤNG VOUCHER =====
+
+bind('#cart-voucher-input', 'keydown', event => {
+
+  if (event.key === 'Enter') {
+
+    event.preventDefault();
+
+    applyVoucherFromInput(
+      '#cart-voucher-input',
+      '#cart-voucher-message'
+    );
+
+  }
+
+});
+
+bind('#checkout-voucher-input', 'keydown', event => {
+
+  if (event.key === 'Enter') {
+
+    event.preventDefault();
+
+    applyVoucherFromInput(
+      '#checkout-voucher-input',
+      '#checkout-voucher-message'
+    );
+
+  }
+
+});
 
   // Mở trang thanh toán toàn màn hình
 bind('#go', 'click', () => {
 
   if (!getCartEntries().length) return;
 
-  const total = getCartTotal();
+  const total = getCartPayableTotal();
 
   const items = getCartEntries().map(entry =>
     analyticsItem(

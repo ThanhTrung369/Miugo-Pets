@@ -3128,3 +3128,368 @@ button.news-readmore:hover {
     }
 
 }
+/* =====================================================
+   CẤU TẠO MODULE RIÊNG CỦA TỪNG SẢN PHẨM
+===================================================== */
+
+.product-composition {
+
+  margin-top: 25px;
+
+  padding: 20px;
+
+  background: var(--w);
+
+  border: 2px solid var(--s);
+
+  border-radius: 12px;
+
+}
+
+
+/* Ẩn khu vực khi chưa có cấu hình */
+
+.product-composition[hidden] {
+
+  display: none !important;
+
+}
+
+
+/* Tiêu đề cấu tạo */
+
+.product-composition-heading {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+
+.product-composition-heading h3 {
+
+  font-size: 21px;
+
+  margin: 0;
+
+}
+
+
+/* Tổng số module */
+
+#detail-product-composition-count {
+
+  display: inline-block;
+
+  padding: 5px 12px;
+
+  border-radius: 99px;
+
+  background: var(--s);
+
+  color: var(--o);
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+}
+
+
+/* Khoảng cách giữa các thẻ module */
+
+.product-composition .detail-module-grid {
+
+  margin-top: 0;
+
+}
+
+
+/* Nhãn số lượng */
+
+.module-count {
+
+  display: inline-block;
+
+  margin: 10px 13px 0;
+
+  padding: 5px 10px;
+
+  background: var(--s);
+
+  color: var(--o);
+
+  border-radius: 99px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+/* =====================================================
+   MIUGO PETS - GIAO DIỆN VOUCHER
+===================================================== */
+
+
+/* ===== KHUNG VOUCHER ===== */
+
+.voucher-box {
+
+  margin: 15px 0;
+
+  padding: 15px;
+
+  background: var(--w);
+
+  border: 1px dashed var(--s);
+
+  border-radius: 12px;
+
+}
+
+
+/* ===== TIÊU ĐỀ ===== */
+
+.voucher-box label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: var(--o);
+
+}
+
+
+/* ===== Ô NHẬP VÀ NÚT ÁP DỤNG ===== */
+
+.voucher-controls {
+
+  display: flex;
+
+  gap: 8px;
+
+  align-items: stretch;
+
+}
+
+
+.voucher-controls input {
+
+  flex: 1;
+
+  min-width: 0;
+
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid var(--s);
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: var(--k);
+
+  font: inherit;
+
+  font-size: 13px;
+
+}
+
+
+.voucher-controls input:focus {
+
+  outline: 2px solid var(--m);
+
+  border-color: var(--m);
+
+}
+
+
+.voucher-apply {
+
+  flex-shrink: 0;
+
+  padding: 0 15px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: var(--o);
+
+  color: white;
+
+  font: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: background .2s;
+
+}
+
+
+.voucher-apply:hover {
+
+  background: var(--m);
+
+}
+
+
+/* ===== THÔNG BÁO VOUCHER ===== */
+
+.voucher-message {
+
+  margin-top: 8px;
+
+  font-size: 12px;
+
+  color: #777;
+
+}
+
+
+.voucher-message.is-success {
+
+  color: #48672b;
+
+  font-weight: 700;
+
+}
+
+
+.voucher-message.is-error {
+
+  color: #b33b32;
+
+}
+
+
+/* ===== NÚT GỠ VOUCHER ===== */
+
+.voucher-remove {
+
+  margin-top: 7px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--o);
+
+  font: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+
+}
+
+
+.voucher-remove:hover {
+
+  color: var(--m);
+
+}
+
+
+/* ===== DÒNG TIỀN GIẢM ===== */
+
+.voucher-discount-row {
+
+  color: var(--o);
+
+}
+
+
+.voucher-discount-row span:last-child {
+
+  font-weight: 700;
+
+}
+
+
+.voucher-discount-row[hidden] {
+
+  display: none !important;
+
+}
+
+
+/* ===== VOUCHER TRONG GIỎ HÀNG ===== */
+
+#cart .voucher-box {
+
+  padding: 12px;
+
+  margin: 12px 0;
+
+}
+
+
+#cart .voucher-controls input {
+
+  font-size: 12px;
+
+  padding: 9px;
+
+}
+
+
+#cart .voucher-apply {
+
+  padding: 0 11px;
+
+  font-size: 12px;
+
+}
+
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width: 420px) {
+
+  .voucher-box {
+
+    padding: 11px;
+
+  }
+
+  .voucher-controls {
+
+    gap: 6px;
+
+  }
+
+  .voucher-apply {
+
+    padding: 0 10px;
+
+  }
+
+}

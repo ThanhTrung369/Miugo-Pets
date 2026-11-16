@@ -355,9 +355,80 @@ src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
     <header><h3>Giỏ hàng</h3><button class="chip" id="closeCart" type="button">Đóng</button></header>
     <div id="items"></div>
     <div class="cf">
-      <div id="ship"></div><div class="pg"><div id="bar"></div></div>
-      <div class="tt"><span>Tạm tính</span><span id="tot">0₫</span></div>
-      <button class="btn" id="go" type="button">Đặt hàng</button>
+      <div id="ship"></div>
+
+<div class="pg">
+  <div id="bar"></div>
+</div>
+
+<!-- ===== VOUCHER TRONG GIỎ HÀNG ===== -->
+
+<div class="voucher-box cart-voucher-box">
+
+  <label for="cart-voucher-input">
+    Mã giảm giá
+  </label>
+
+  <div class="voucher-controls">
+
+    <input
+      id="cart-voucher-input"
+      type="text"
+      placeholder="Nhập mã voucher"
+      autocomplete="off"
+    >
+
+    <button
+      class="voucher-apply"
+      id="cart-voucher-apply"
+      type="button">
+      Áp dụng
+    </button>
+
+  </div>
+
+  <p
+    id="cart-voucher-message"
+    class="voucher-message"
+    aria-live="polite">
+    Nhập mã ưu đãi để được giảm giá.
+  </p>
+
+  <button
+    id="cart-voucher-remove"
+    class="voucher-remove"
+    type="button"
+    hidden>
+    Gỡ mã giảm giá
+  </button>
+
+</div>
+
+<!-- ===== TỔNG TIỀN GIỎ HÀNG ===== -->
+
+<div class="tt">
+  <span>Tạm tính</span>
+  <span id="cart-subtotal">0₫</span>
+</div>
+
+<div
+  class="tt voucher-discount-row"
+  id="cart-discount-row"
+  hidden>
+
+  <span>Giảm giá voucher</span>
+  <span id="cart-discount">-0₫</span>
+
+</div>
+
+<div class="tt">
+  <span>Tổng thanh toán</span>
+  <span id="tot">0₫</span>
+</div>
+
+<button class="btn" id="go" type="button">
+  Đặt hàng
+</button>
     </div>
   </aside>
 
@@ -481,7 +552,28 @@ src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
 
         <p id="detail-module-summary"></p>
 
-        <div id="detail-modules" class="detail-module-grid"></div>
+<!-- ===== CẤU TẠO RIÊNG CỦA TỪNG SẢN PHẨM ===== -->
+
+<div id="detail-product-composition" class="product-composition" hidden>
+
+  <div class="product-composition-heading">
+
+    <h3>Cấu tạo riêng của sản phẩm</h3>
+
+    <span id="detail-product-composition-count"></span>
+
+  </div>
+
+  <div
+    id="detail-product-composition-grid"
+    class="detail-module-grid">
+  </div>
+
+</div>
+
+<!-- ===== DANH SÁCH CÁC MODULE CÓ THỂ KẾT HỢP ===== -->
+
+<div id="detail-modules" class="detail-module-grid"></div>
 
       </section>
 
@@ -669,12 +761,66 @@ src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
           <h2>Đơn hàng của bạn</h2>
 
           <div id="checkout-items" class="checkout-items"></div>
+          <!-- ===== VOUCHER THANH TOÁN ===== -->
+
+<div class="voucher-box checkout-voucher-box">
+
+  <label for="checkout-voucher-input">
+    Mã giảm giá
+  </label>
+
+  <div class="voucher-controls">
+
+    <input
+      id="checkout-voucher-input"
+      type="text"
+      placeholder="Nhập mã giảm giá"
+      autocomplete="off"
+    >
+
+    <button
+      class="voucher-apply"
+      id="checkout-voucher-apply"
+      type="button">
+      Áp dụng
+    </button>
+
+  </div>
+
+  <p
+    id="checkout-voucher-message"
+    class="voucher-message"
+    aria-live="polite">
+    Nhập mã ưu đãi để được giảm giá.
+  </p>
+
+  <button
+    id="checkout-voucher-remove"
+    class="voucher-remove"
+    type="button"
+    hidden>
+    Gỡ mã giảm giá
+  </button>
+
+</div>
 
           <div class="checkout-total-row">
             <span>Tạm tính</span>
             <b id="checkout-subtotal">0₫</b>
           </div>
 
+          <!-- SỐ TIỀN ĐƯỢC GIẢM -->
+
+<div
+  class="checkout-total-row voucher-discount-row"
+  id="checkout-discount-row"
+  hidden>
+
+  <span>Giảm giá voucher</span>
+
+  <b id="checkout-discount">-0₫</b>
+
+</div>
           <div class="checkout-total-row checkout-grand-total">
             <span>Tổng thanh toán</span>
             <b id="checkout-total">0₫</b>
